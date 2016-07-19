@@ -31,7 +31,7 @@ function buildCartItems(tags, allItems) {
       cartItem.count++;
     } else {
       const item = allItems.find(item => item.barcode === barcode);
-      cartItems.push({item: item, count: count});
+      cartItems.push({item, count});
     }
   }
 
@@ -39,26 +39,28 @@ function buildCartItems(tags, allItems) {
 }
 
 function buildReceiptItems(cartItems, allPromotions) {
-
-  const receiptItems = [];
-
-  for (const cartItem of cartItems) {
+  return cartItems.map((cartItem) => {
 
     const type = findPromotionType(cartItem.item.barcode, allPromotions);
 
-    let subTotal = cartItem.item.price * cartItem.count;
+    const {saved, subtotal} = discount(cartItem.count, cartItem.item.price, type);
 
-    let saved = 0;
+    return {cartItem, saved, subtotal};
+  });
+}
 
-    if (type === 'BUY_TWO_GET_ONE_FREE') {
-      saved = parseInt(cartItem.count / 3) * cartItem.item.price;
-      subTotal -= saved;
-    }
+function discount(count, price, type) {
 
-    receiptItems.push({cartItem: cartItem, saved: saved, subTotal: subTotal});
+  let saved = 0;
+
+  let subtotal = count * price;
+
+  if (type === 'BUY_TWO_GET_ONE_FREE') {
+    saved = parseInt(count / 3) * price;
+    subtotal -= saved;
   }
 
-  return receiptItems;
+  return {saved, subtotal};
 }
 
 function findPromotionType(barcode, promotions) {
@@ -76,7 +78,7 @@ function buildReceipt(receiptItems) {
   let savedTotal = 0;
 
   for (const receiptItem of receiptItems) {
-    total += receiptItem.subTotal;
+    total += receiptItem.subtotal;
     savedTotal += receiptItem.saved;
   }
 
@@ -93,7 +95,7 @@ function buildReceiptText(receipt) {
 
   for (const receiptItem of receipt.receiptItems) {
     const cartItem = receiptItem.cartItem;
-    receiptItemsText += `名称：${cartItem.item.name}，数量：${cartItem.count}${cartItem.item.unit}，单价：${formatPrice(cartItem.item.price)}(元)，小计：${formatPrice(receiptItem.subTotal)}(元)\n`;
+    receiptItemsText += `名称：${cartItem.item.name}，数量：${cartItem.count}${cartItem.item.unit}，单价：${formatPrice(cartItem.item.price)}(元)，小计：${formatPrice(receiptItem.subtotal)}(元)\n`;
   }
 
   return `***<没钱赚商店>收据***
