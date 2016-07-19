@@ -41,21 +41,21 @@ function buildCartItems(tags, allItems) {
 function buildReceiptItems(cartItems, allPromotions) {
   return cartItems.map((cartItem) => {
 
-    const type = findPromotionType(cartItem.item.barcode, allPromotions);
+    const promotionType = findPromotionType(cartItem.item.barcode, allPromotions);
 
-    const {saved, subtotal} = discount(cartItem.count, cartItem.item.price, type);
+    const {saved, subtotal} = discount(cartItem.count, cartItem.item.price, promotionType);
 
     return {cartItem, saved, subtotal};
   });
 }
 
-function discount(count, price, type) {
+function discount(count, price, promotionType) {
 
   let saved = 0;
 
   let subtotal = count * price;
 
-  if (type === 'BUY_TWO_GET_ONE_FREE') {
+  if (promotionType === 'BUY_TWO_GET_ONE_FREE') {
     saved = parseInt(count / 3) * price;
     subtotal -= saved;
   }
