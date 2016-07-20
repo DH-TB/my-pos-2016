@@ -51,9 +51,8 @@ function buildReceiptItems(cartItems, allPromotions) {
 
 function discount(count, price, promotionType) {
 
-  let saved = 0;
-
   let subtotal = count * price;
+  let saved = 0;
 
   if (promotionType === 'BUY_TWO_GET_ONE_FREE') {
     saved = parseInt(count / 3) * price;
@@ -85,10 +84,15 @@ function buildReceipt(receiptItems) {
 
 function buildReceiptText(receipt) {
 
-  let receiptItemsText = receipt.receiptItems.map(receiptItem => {
-    const cartItem = receiptItem.cartItem;
-    return `名称：${cartItem.item.name}，数量：${cartItem.count}${cartItem.item.unit}，单价：${formatMoney(cartItem.item.price)}(元)，小计：${formatMoney(receiptItem.subtotal)}(元)`;
-  }).join('\n');
+  let receiptItemsText = receipt.receiptItems
+    .map(receiptItem => {
+      const cartItem = receiptItem.cartItem;
+      return `名称：${cartItem.item.name}，\
+            数量：${cartItem.count}${cartItem.item.unit}，\
+            单价：${formatMoney(cartItem.item.price)}(元)，\
+            小计：${formatMoney(receiptItem.subtotal)}(元)`;
+    })
+    .join('\n');
 
   return `***<没钱赚商店>收据***
 ${receiptItemsText}
