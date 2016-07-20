@@ -28,7 +28,7 @@ function buildCartItems(tags, allItems) {
     const cartItem = cartItems.find(cartItem => cartItem.item.barcode === barcode);
 
     if (cartItem) {
-      cartItem.count++;
+      cartItem.count += count;
     } else {
       const item = allItems.find(item => item.barcode === barcode);
       cartItems.push({item, count});
