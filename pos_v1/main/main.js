@@ -88,9 +88,9 @@ function buildReceiptText(receipt) {
     .map(receiptItem => {
       const cartItem = receiptItem.cartItem;
       return `名称：${cartItem.item.name}，\
-            数量：${cartItem.count}${cartItem.item.unit}，\
-            单价：${formatMoney(cartItem.item.price)}(元)，\
-            小计：${formatMoney(receiptItem.subtotal)}(元)`;
+数量：${cartItem.count}${cartItem.item.unit}，\
+单价：${formatMoney(cartItem.item.price)}(元)，\
+小计：${formatMoney(receiptItem.subtotal)}(元)`;
     })
     .join('\n');
 
