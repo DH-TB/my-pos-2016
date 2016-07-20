@@ -56,8 +56,9 @@ function discount(count, price, promotionType) {
 
   if (promotionType === 'BUY_TWO_GET_ONE_FREE') {
     saved = parseInt(count / 3) * price;
-    subtotal -= saved;
   }
+
+  subtotal -= saved;
 
   return {saved, subtotal};
 }
