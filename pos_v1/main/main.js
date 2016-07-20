@@ -67,9 +67,7 @@ function findPromotionType(barcode, promotions) {
 
   const promotion = promotions.find(promotion => promotion.barcodes.some(b => b === barcode));
 
-  if (promotion) {
-    return promotion.type;
-  }
+  return promotion ? promotion.type : undefined;
 }
 
 function buildReceipt(receiptItems) {
@@ -82,24 +80,18 @@ function buildReceipt(receiptItems) {
     savedTotal += receiptItem.saved;
   }
 
-  return {
-    receiptItems: receiptItems,
-    total: total,
-    savedTotal: savedTotal
-  }
+  return {receiptItems, total, savedTotal}
 }
 
 function buildReceiptText(receipt) {
 
-  let receiptItemsText = '';
-
-  for (const receiptItem of receipt.receiptItems) {
+  let receiptItemStrings = receipt.receiptItems.map(receiptItem => {
     const cartItem = receiptItem.cartItem;
-    receiptItemsText += `名称：${cartItem.item.name}，数量：${cartItem.count}${cartItem.item.unit}，单价：${formatPrice(cartItem.item.price)}(元)，小计：${formatPrice(receiptItem.subtotal)}(元)\n`;
-  }
+    return `名称：${cartItem.item.name}，数量：${cartItem.count}${cartItem.item.unit}，单价：${formatPrice(cartItem.item.price)}(元)，小计：${formatPrice(receiptItem.subtotal)}(元)`;
+  });
 
   return `***<没钱赚商店>收据***
-${receiptItemsText}\
+${receiptItemStrings.join('\n')}
 ----------------------
 总计：${formatPrice(receipt.total)}(元)
 节省：${formatPrice(receipt.savedTotal)}(元)
