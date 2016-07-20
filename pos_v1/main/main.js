@@ -39,7 +39,7 @@ function buildCartItems(tags, allItems) {
 }
 
 function buildReceiptItems(cartItems, allPromotions) {
-  return cartItems.map((cartItem) => {
+  return cartItems.map(cartItem => {
 
     const promotionType = findPromotionType(cartItem.item.barcode, allPromotions);
 
