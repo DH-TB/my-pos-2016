@@ -87,17 +87,17 @@ function buildReceiptText(receipt) {
 
   let receiptItemsText = receipt.receiptItems.map(receiptItem => {
     const cartItem = receiptItem.cartItem;
-    return `名称：${cartItem.item.name}，数量：${cartItem.count}${cartItem.item.unit}，单价：${formatPrice(cartItem.item.price)}(元)，小计：${formatPrice(receiptItem.subtotal)}(元)`;
+    return `名称：${cartItem.item.name}，数量：${cartItem.count}${cartItem.item.unit}，单价：${formatMoney(cartItem.item.price)}(元)，小计：${formatMoney(receiptItem.subtotal)}(元)`;
   }).join('\n');
 
   return `***<没钱赚商店>收据***
 ${receiptItemsText}
 ----------------------
-总计：${formatPrice(receipt.total)}(元)
-节省：${formatPrice(receipt.savedTotal)}(元)
+总计：${formatMoney(receipt.total)}(元)
+节省：${formatMoney(receipt.savedTotal)}(元)
 **********************`;
 }
 
-function formatPrice(price) {
-  return price.toFixed(2);
+function formatMoney(money) {
+  return money.toFixed(2);
 }
